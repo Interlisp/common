@@ -21,9 +21,9 @@ Arguments omitted or given as - uses stdin/stdout
 */
 
 int main(int argc, char **argv) {
-  int heights[7] = {8, 10, 6, 10, 8, 8, 8}, maxHt, chUsed, page = 1,
+  int heights[7] = {8, 8, 6, 10, 8, 8, 8}, maxHt, chUsed, page = 1,
     curfont = 1, curY, inString, i, nexF;
-  char inputline[500], *result, *ctlF, *nextOut, *outPtr, outline[1024];
+  char inputline[500], *result, *ctlF, *outPtr, outline[1024];
   FILE *in, *out;
   if(argc > 1) {
     if(!strcmp(argv[1], "-")) in = stdin;
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
   fprintf(out, "%%!PS-Adobe 1.0\n\
   /fS /Symbol findfont 8 scalefont def /FS {fS setfont} def\
   /f1 /Courier findfont 8 scalefont def /F1 {f1 setfont} def\
-  /f2 /Helvetica-Bold findfont 10 scalefont def /F2 {f2 setfont} def\
+  /f2 /Helvetica-Bold findfont 8 scalefont def /F2 {f2 setfont} def\
   /f3 /Courier findfont 6 scalefont def /F3 {f3 setfont} def\
   /f4 /Helvetica-Bold findfont 10 scalefont def /F4 {f4 setfont} def\
   /f5 /Times-Roman findfont 8 scalefont def /F5 {f5 setfont} def\
@@ -69,7 +69,6 @@ int main(int argc, char **argv) {
   curY = 746;
  newline:
   result = fgets(inputline, sizeof(inputline), in);
-  nextOut = outline;
   if(feof(in)) {
     fprintf(out, "\nshowpage\n");
     return 0;
@@ -78,8 +77,8 @@ int main(int argc, char **argv) {
     inputline[strlen(inputline)-1] = '\0';
   ctlF = result;
   maxHt = heights[curfont - 1];
-  while(ctlF = index(ctlF, 6)) {
-    int nexF = ctlF[1];
+  while((ctlF = index(ctlF, 6))) {
+    nexF = ctlF[1];
     if(nexF && heights[nexF] > maxHt) maxHt = heights[nexF];
     if(!nexF) break;
     ctlF += 2;
@@ -93,11 +92,11 @@ int main(int argc, char **argv) {
     case 6: /* font tag */
       nexF = result[++i];
       if(inString) {
-	chUsed = snprintf(outPtr, sizeof(outline) - (outPtr - outline), ")show ");
+	chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
 	outPtr += chUsed;
 	inString = 0;
       }
-      chUsed = snprintf(outPtr, sizeof(outline) - (outPtr - outline), "F%d ", nexF);
+      chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), "F%d ", nexF);
       outPtr += chUsed;
       curfont = nexF;
       break;
@@ -113,10 +112,10 @@ int main(int argc, char **argv) {
     case '_':  // left arrow assignment
     case '^':  // up arrow
       if(inString) {
-	chUsed = snprintf(outPtr, sizeof(outline) - (outPtr - outline), ")show ");
+	chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
 	outPtr += chUsed;
       }
-      chUsed = snprintf(outPtr, sizeof(outline) - (outPtr - outline), 
+      chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), 
 			"FS(\\%o)show F%d ",
 			result[i] == '_' ? 0254 : 0255, curfont);
       outPtr += chUsed;
@@ -135,7 +134,7 @@ int main(int argc, char **argv) {
     }
   }
   if(inString)	{
-    chUsed = snprintf(outPtr, sizeof(outline) - (outPtr - outline), ")show ");
+    chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
     outPtr += chUsed;
     inString = 0;
   }
