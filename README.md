@@ -1,8 +1,6 @@
-# utilities
-Utilities not linked with any particular repo or release
+# Common
 
+This repo contains "things" that are common across more than one repo in the Interlisp organization.
 
-TBD: Overall ./configure && make && make install
-Guidelines on contributing code
-
-Agreement to copyright & license?
+Currently it contains 1) general Utilities useful with Medley, maiko, etc. and 2) graphical Assets
+like logos and icons used across all Interlip.org websites, apps, and documentation.
