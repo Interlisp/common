@@ -92,11 +92,11 @@ int main(int argc, char **argv) {
     case 6: /* font tag */
       nexF = result[++i];
       if(inString) {
-	chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
+	chUsed = snprintf(outPtr, sizeof(outline) - (size_t)(outPtr - outline), ")show ");
 	outPtr += chUsed;
 	inString = 0;
       }
-      chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), "F%d ", nexF);
+      chUsed = snprintf(outPtr, sizeof(outline) - (size_t)(outPtr - outline), "F%d ", nexF);
       outPtr += chUsed;
       curfont = nexF;
       break;
@@ -112,10 +112,10 @@ int main(int argc, char **argv) {
     case '_':  // left arrow assignment
     case '^':  // up arrow
       if(inString) {
-	chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
+	chUsed = snprintf(outPtr, sizeof(outline) - (size_t)(outPtr - outline), ")show ");
 	outPtr += chUsed;
       }
-      chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), 
+      chUsed = snprintf(outPtr, sizeof(outline) - (size_t)(outPtr - outline), 
 			"FS(\\%o)show F%d ",
 			result[i] == '_' ? 0254 : 0255, curfont);
       outPtr += chUsed;
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
     }
   }
   if(inString)	{
-    chUsed = snprintf(outPtr, sizeof(outline) - (long)(outPtr - outline), ")show ");
+    chUsed = snprintf(outPtr, sizeof(outline) - (size_t)(outPtr - outline), ")show ");
     outPtr += chUsed;
     inString = 0;
   }
